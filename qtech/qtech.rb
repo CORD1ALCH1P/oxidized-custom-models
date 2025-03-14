@@ -1,11 +1,13 @@
-class Qtech < Oxidized::Model
-  prompt /^\([\w-]+\) \#$/
-  comment  '# '
+require 'oxidized/input/telnet'
 
-  cmd 'show running-config' do |cfg|
-    cfg
-  end
+class Qtech < Oxidized::Model
+  using Refinements
+  prompt /^\(\S+\) #/
 
   cfg :telnet do
+    username /^User:/i
+    password /^Password:/i
+    post_login 'enable'
+    pre_logout 'exit'
   end
 end
